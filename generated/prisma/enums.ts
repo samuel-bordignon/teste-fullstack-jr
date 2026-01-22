@@ -9,4 +9,9 @@
 * 🟢 You can import this file directly.
 */
 
+export const tipo_movimentacao = {
+  entrada: 'entrada',
+  saida: 'saida'
+} as const
 
+export type tipo_movimentacao = (typeof tipo_movimentacao)[keyof typeof tipo_movimentacao]
