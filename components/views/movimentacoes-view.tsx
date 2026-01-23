@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { AddMovimentModal } from "../movimentacoes/movimentacoes-add-modal";
 import { movimentacoesColumns } from "../movimentacoes/movimentacoes-columns";
 import { useMovimentacoes } from "@/hooks/use-movimentacoes";
-import { MovimentacoesSearch } from "../movimentacoes/movimentacoes-search";
 import { normalizeString } from "@/lib/string-utils";
 
 export function MovimentacoesView() {
@@ -32,7 +31,12 @@ export function MovimentacoesView() {
                 data={filteredMoviments || []}
                 isLoading={isLoading}
                 searchComponent={
-                    <MovimentacoesSearch value={search} onChange={setSearch} />
+                    <Input
+                        placeholder="Buscar por nome ou ID"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="max-w-sm"
+                    />
                 }
                 actionButtons={[
                     <Button key="new-category" onClick={() => setIsAddModalOpen(true)}>

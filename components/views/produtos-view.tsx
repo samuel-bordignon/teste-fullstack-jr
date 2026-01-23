@@ -9,7 +9,6 @@ import { produtoColumns } from "@/components/produtos/produto-columns";
 import { AddProductModal } from "@/components/produtos/produto-add-modal";
 import { EditProductModal } from "@/components/produtos/produto-edit-modal";
 import { DeleteProductDialog } from "@/components/produtos/produto-delete-dialog";
-import { ProdutoSearch } from "../produtos/produto-search";
 import { normalizeString } from "@/lib/string-utils";
 
 export function ProdutosView() {
@@ -56,7 +55,12 @@ export function ProdutosView() {
         onDelete={handleDelete}
         isLoading={isLoading}
         searchComponent={
-          <ProdutoSearch value={search} onChange={setSearch} />
+          <Input
+            placeholder="Buscar por nome ou ID"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="max-w-sm"
+          />
         }
         actionButtons={[
           <Button key="new-product" onClick={() => setIsAddModalOpen(true)}>

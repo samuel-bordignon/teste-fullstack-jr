@@ -9,7 +9,6 @@ import { categoriaColumns } from "@/components/categorias/categoria-columns";
 import { AddCategoryModal } from "@/components/categorias/categoria-add-modal";
 import { EditCategoryModal } from "@/components/categorias/categoria-edit-modal";
 import { DeleteCategoryDialog } from "@/components/categorias/categoria-delete-dialog";
-import { CategoriaSearch } from "../categorias/categoria-search";
 import { normalizeString } from "@/lib/string-utils";
 
 export function CategoriasView() {
@@ -61,7 +60,12 @@ export function CategoriasView() {
         onDelete={handleDelete}
         isLoading={isLoading}
         searchComponent={
-          <CategoriaSearch value={search} onChange={setSearch} />
+          <Input
+            placeholder="Buscar por nome ou ID"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="max-w-sm"
+          />
         }
         actionButtons={[
           <Button key="new-category" onClick={() => setIsAddModalOpen(true)}>
