@@ -14,6 +14,14 @@ export const estoqueColumns: ColumnDef<Estoque>[] = [
     header: "Produto ID",
   },
   {
+    accessorKey: "produtos.nome",
+    header: "Nome do Produto",
+  },
+  {
+    accessorKey: "produtos.estoque_minimo",
+    header: "Estoque Mínino",
+  },
+  {
     accessorKey: "quantidade",
     header: "Quantidade",
   },

@@ -9,17 +9,26 @@ import { categoriaColumns } from "@/components/categorias/categoria-columns";
 import { AddCategoryModal } from "@/components/categorias/categoria-add-modal";
 import { EditCategoryModal } from "@/components/categorias/categoria-edit-modal";
 import { DeleteCategoryDialog } from "@/components/categorias/categoria-delete-dialog";
+import { CategoriaSearch } from "../categorias/categoria-search";
+import { normalizeString } from "@/lib/string-utils";
 
 export function CategoriasView() {
   const { data: categories, isLoading, isError, error } = useCategories();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Categoria | null>(
     null,
   );
   const [categoryIdToDelete, setCategoryIdToDelete] = useState<string | null>(
     null,
+  );
+
+
+  const filteredCategories = categories?.filter((categorie) =>
+    normalizeString(categorie.nome).includes(normalizeString(search)) ||
+    normalizeString(categorie.id).includes(normalizeString(search))
   );
 
   const handleEdit = (id: string) => {
@@ -47,12 +56,12 @@ export function CategoriasView() {
     <>
       <DataTable
         columns={categoriaColumns}
-        data={categories || []}
+        data={filteredCategories || []}
         onEdit={handleEdit}
         onDelete={handleDelete}
         isLoading={isLoading}
         searchComponent={
-          <Input placeholder="Buscar categorias..." className="max-w-sm" />
+          <CategoriaSearch value={search} onChange={setSearch} />
         }
         actionButtons={[
           <Button key="new-category" onClick={() => setIsAddModalOpen(true)}>

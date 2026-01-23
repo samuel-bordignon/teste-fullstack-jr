@@ -14,6 +14,10 @@ export const movimentacoesColumns: ColumnDef<Movimentacoes>[] = [
     header: "Produto ID",
   },
   {
+    accessorKey: "produtos.nome",
+    header: "Nome do Produto",
+  },
+  {
     accessorKey: "quantidade",
     header: "Quantidade",
   },

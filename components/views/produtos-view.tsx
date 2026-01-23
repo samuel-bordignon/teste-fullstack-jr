@@ -9,6 +9,8 @@ import { produtoColumns } from "@/components/produtos/produto-columns";
 import { AddProductModal } from "@/components/produtos/produto-add-modal";
 import { EditProductModal } from "@/components/produtos/produto-edit-modal";
 import { DeleteProductDialog } from "@/components/produtos/produto-delete-dialog";
+import { ProdutoSearch } from "../produtos/produto-search";
+import { normalizeString } from "@/lib/string-utils";
 
 export function ProdutosView() {
   const { data: produtos, isLoading, isError, error } = useProdutos();
@@ -16,8 +18,12 @@ export function ProdutosView() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Produto | null>(null);
-  const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
-    null,
+  const [productIdToDelete, setProductIdToDelete] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+
+  const filteredProdutos = produtos?.filter((produto) =>
+    normalizeString(produto.nome).includes(normalizeString(search)) ||
+    normalizeString(produto.sku).includes(normalizeString(search))
   );
 
   const handleEdit = (id: string) => {
@@ -45,12 +51,12 @@ export function ProdutosView() {
     <>
       <DataTable
         columns={produtoColumns}
-        data={produtos || []}
+        data={filteredProdutos || []}
         onEdit={handleEdit}
         onDelete={handleDelete}
         isLoading={isLoading}
         searchComponent={
-          <Input placeholder="Buscar produtos..." className="max-w-sm" />
+          <ProdutoSearch value={search} onChange={setSearch} />
         }
         actionButtons={[
           <Button key="new-product" onClick={() => setIsAddModalOpen(true)}>

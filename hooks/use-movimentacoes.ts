@@ -4,9 +4,9 @@ import z from "zod";
 
 // Zod Schemas
 export const createMovimentSchema = z.object({
-  produto_id: z.string().min(1, "Selecione um produto"),
-  quantidade: z.coerce.number().min(1, "Movimentação mínima deve ser maior que zero"),
-  tipo: z.enum(["entrada", "saida"])
+    produto_id: z.string().min(1, "Selecione um produto"),
+    quantidade: z.coerce.number().min(1, "Movimentação mínima deve ser maior que zero"),
+    tipo: z.enum(["entrada", "saida"])
 });
 
 // Types
@@ -16,6 +16,9 @@ export type Movimentacoes = {
     quantidade: number,
     tipo: Tipo_movimentacao,
     criado_em: string,
+    produtos: {
+        nome: string
+    }
 };
 
 enum Tipo_movimentacao {
