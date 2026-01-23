@@ -46,7 +46,8 @@ const createMovimentacoes = async (
     });
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create movement");
+        console.log(errorData)
+        throw new Error(errorData.error || "Failed to create movement");
     }
     return response.json();
 };

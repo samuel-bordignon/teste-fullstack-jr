@@ -41,7 +41,7 @@ export function AddMovimentModal({
             component: "select" as const,
             placeholder: "Selecione",
             options: produtos?.map(p => ({
-                label: p.nome,
+                label: `${p.nome} - Estoque: ${p.estoque?.quantidade} - ID: ${p.id}`,
                 value: p.id,
             })),
         }
