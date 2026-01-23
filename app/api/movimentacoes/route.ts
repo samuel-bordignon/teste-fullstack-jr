@@ -34,6 +34,12 @@ export async function POST(request: Request) {
         );
         return NextResponse.json(newMovimentacaoSerialized, { status: 201 });
     } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json(
+                { error: error.message },
+                { status: 400 }
+            );
+        }
         console.error(error);
         return NextResponse.json({ error: 'Falha ao movimentar estoque' }, { status: 500 });
     }
