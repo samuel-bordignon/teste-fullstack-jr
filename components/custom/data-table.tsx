@@ -7,6 +7,8 @@ import {
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
 } from "@tanstack/react-table";
 
 import {
@@ -45,9 +47,15 @@ export function DataTable<TData extends { id: string }, TValue>({
   searchComponent,
   actionButtons,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(), // Enable pagination
   });
@@ -84,9 +92,9 @@ export function DataTable<TData extends { id: string }, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   );
                 })}
