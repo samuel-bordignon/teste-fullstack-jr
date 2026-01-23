@@ -3,7 +3,11 @@ import { produtos } from '@/generated/prisma/client';
 
 export const findAll = async (): Promise<produtos[]> => {
   return prisma.produtos.findMany({
-    include: { categorias: true },
+    include: {
+      categorias: true,
+      estoque: true,
+      estoque_movimentacoes: true
+    },
   });
 };
 

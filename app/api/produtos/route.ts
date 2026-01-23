@@ -3,14 +3,14 @@ import * as service from '@/services/produtos.service';
 
 export async function GET() {
   const produtos = await service.getAllProdutos();
- const produtosSerialized = produtos.map(produto => {
+  const produtosSerialized = produtos.map(produto => {
     return JSON.parse(
       JSON.stringify(produto, (key, value) =>
         typeof value === 'bigint' ? value.toString() : value
       )
     );
   });
-   return NextResponse.json(produtosSerialized);
+  return NextResponse.json(produtosSerialized);
 }
 
 export async function POST(request: Request) {

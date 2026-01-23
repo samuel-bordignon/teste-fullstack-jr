@@ -34,13 +34,20 @@ export async function POST(request: Request) {
         );
         return NextResponse.json(newMovimentacaoSerialized, { status: 201 });
     } catch (error) {
-        if (error instanceof Error) {
+        if (
+            error instanceof Error &&
+            error.message === "Quantidade insuficiente em estoque"
+        ) {
             return NextResponse.json(
                 { error: error.message },
                 { status: 400 }
             );
         }
-        console.error(error);
-        return NextResponse.json({ error: 'Falha ao movimentar estoque' }, { status: 500 });
+
+        return NextResponse.json(
+            { error: "Erro interno do servidor" },
+            { status: 500 }
+        );
     }
+
 }
