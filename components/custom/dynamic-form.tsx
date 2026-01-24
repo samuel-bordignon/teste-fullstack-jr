@@ -5,23 +5,45 @@ import * as z from "zod";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { RHFInputField, RHFSelectField } from "./form-fields";
+import { RHFInputField, RHFInputRangerField, RHFSelectField } from "./form-fields";
+
+type InputField<T> = {
+  component: "input";
+  name: keyof z.infer<T>;
+  label: string;
+  placeholder?: string;
+  type?: string;
+};
+
+type SelectField<T> = {
+  component: "select";
+  name: keyof z.infer<T>;
+  label: string;
+  placeholder?: string;
+  options: { label: string; value: string }[];
+};
+
+type InputRangerField = {
+  component: "inputRanger";
+  label: string;
+  type?: "number" | "date";
+  from: string;
+  to: string;
+};
 
 interface DynamicFormProps<T extends z.ZodType<any, any, any>> {
   schema: T;
   onSubmit: (data: z.infer<T>) => void;
   defaultValues?: Partial<z.infer<T>>;
-  fields: Array<{
-    name: keyof z.infer<T>;
-    label: string;
-    placeholder?: string;
-    type?: string; // For input fields
-    options?: { label: string; value: string }[]; // For select fields
-    component: "input" | "select";
-  }>;
+  fields: Array<
+    | InputField<T>
+    | SelectField<T>
+    | InputRangerField
+  >;
   submitButtonText?: string;
   isSubmitting?: boolean;
 }
+
 
 export function DynamicForm<T extends z.ZodType<any, any, any>>({
   schema,
@@ -39,8 +61,9 @@ export function DynamicForm<T extends z.ZodType<any, any, any>>({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {fields.map((fieldConfig) => (
-          <div key={fieldConfig.name as string}>
+        {fields.map((fieldConfig, index) => (
+          //uso o index ao invés de .name
+          <div key={index}>
             {fieldConfig.component === "input" && (
               <RHFInputField
                 name={fieldConfig.name as string}
@@ -55,6 +78,14 @@ export function DynamicForm<T extends z.ZodType<any, any, any>>({
                 label={fieldConfig.label}
                 placeholder={fieldConfig.placeholder}
                 options={fieldConfig.options}
+              />
+            )}
+            {fieldConfig.component === "inputRanger" && (
+              <RHFInputRangerField
+                label={fieldConfig.label}
+                type={fieldConfig.type}
+                from={fieldConfig.from}
+                to={fieldConfig.to}
               />
             )}
           </div>

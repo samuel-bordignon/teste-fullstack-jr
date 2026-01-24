@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProdutos, Produto } from "@/hooks/use-produtos";
+import { useProdutos, Produto, FilterProdutoPayload } from "@/hooks/use-produtos";
 import { DataTable } from "@/components/custom/data-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,15 +10,19 @@ import { AddProductModal } from "@/components/produtos/produto-add-modal";
 import { EditProductModal } from "@/components/produtos/produto-edit-modal";
 import { DeleteProductDialog } from "@/components/produtos/produto-delete-dialog";
 import { normalizeString } from "@/lib/string-utils";
+import { FilterProductModal } from "../produtos/produto-filter";
+import { Funnel, X } from "lucide-react";
 
 export function ProdutosView() {
-  const { data: produtos, isLoading, isError, error } = useProdutos();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterProdutoPayload>();
   const [selectedProduct, setSelectedProduct] = useState<Produto | null>(null);
   const [productIdToDelete, setProductIdToDelete] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const { data: produtos, isLoading, isError, error } = useProdutos(filters);
 
   const filteredProdutos = produtos?.filter((produto) =>
     normalizeString(produto.nome).includes(normalizeString(search)) ||
@@ -62,6 +66,20 @@ export function ProdutosView() {
             className="max-w-sm"
           />
         }
+        filterComponent={
+          <>
+            <Button variant={"outline"} onClick={() => setIsFilterModalOpen(true)}>
+              Filtros <Funnel />
+            </Button>
+            {
+              filters && (
+                <Button variant={"outline"} onClick={() => setFilters(undefined)}>
+                  Limpar <X />
+                </Button>
+              )
+            }
+          </>
+        }
         actionButtons={[
           <Button key="new-product" onClick={() => setIsAddModalOpen(true)}>
             Novo Produto
@@ -69,6 +87,14 @@ export function ProdutosView() {
         ]}
       />
 
+      <FilterProductModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        onApply={(filters) => {
+          setFilters(filters)
+          setIsFilterModalOpen(false)
+        }}
+      />
       <AddProductModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

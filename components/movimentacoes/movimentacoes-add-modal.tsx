@@ -15,7 +15,7 @@ export function AddMovimentModal({
     onClose: () => void;
 }) {
     const createMovimentMutation = useCreateMovimentacoes();
-    const {data: produtos} = useProdutos()
+    const { data: produtos } = useProdutos()
 
     const formFields = [
         {
@@ -43,7 +43,7 @@ export function AddMovimentModal({
             options: produtos?.map(p => ({
                 label: `${p.nome} - Estoque: ${p.estoque?.quantidade} - ID: ${p.id}`,
                 value: p.id,
-            })),
+            })) || [],
         }
     ];
 
