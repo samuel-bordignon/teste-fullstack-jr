@@ -143,11 +143,13 @@ Permite alternar entre os módulos de forma simples e direta.
 
 ### 🔹 2. Barra de busca
 
-Presente em todas as abas, permite buscar por:
+Presente em todas as abas, permite buscar por (dependendo do módulo):
 
-* Nome
+* Nome de produto
+* Nome de categoria
+* Marca
 * ID
-* SKU (dependendo do módulo)
+* SKU 
 
 <img src="./public/BarraFiltragem.png" />
 
@@ -159,7 +161,7 @@ Disponível ao lado da barra de busca, permite realizar consultas mais refinadas
 
 * Categoria
 * Marca
-* Nome
+* Nome de produto
 * Intervalos de quantidade (ex: 10–100)
 * Intervalos de datas
 
