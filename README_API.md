@@ -267,23 +267,7 @@ GET /api/produtos?min=10&max=100
       "produto_id": "1",
       "quantidade": 0,
       "atualizado_em": "2026-01-22T03:54:03.113Z"
-    },
-    "estoque_movimentacoes": [
-      {
-        "id": "1",
-        "produto_id": "1",
-        "quantidade": 50,
-        "tipo": "entrada",
-        "criado_em": "2026-01-22T03:54:03.117Z"
-      },
-      {
-        "id": "2",
-        "produto_id": "1",
-        "quantidade": 5,
-        "tipo": "saida",
-        "criado_em": "2026-01-22T03:54:03.117Z"
-      }
-    ]
+    }
   },
   {
     "id": "4",
@@ -304,8 +288,7 @@ GET /api/produtos?min=10&max=100
       "produto_id": "4",
       "quantidade": 0,
       "atualizado_em": "2026-01-22T03:54:03.113Z"
-    },
-    "estoque_movimentacoes": []
+    }
   }
 ]
 ```

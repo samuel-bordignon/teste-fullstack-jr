@@ -42,7 +42,6 @@ export const findAll = async (filters?: FilterProdutoPayload): Promise<produtos[
     include: {
       categorias: true,
       estoque: true,
-      estoque_movimentacoes: true,
     },
   });
 };

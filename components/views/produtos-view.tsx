@@ -26,7 +26,8 @@ export function ProdutosView() {
 
   const filteredProdutos = produtos?.filter((p) =>
     normalizeString(p.nome).includes(normalizeString(search)) ||
-    normalizeString(p.sku).includes(normalizeString(search))
+    normalizeString(p.sku).includes(normalizeString(search))||
+    normalizeString(p.marca).includes(normalizeString(search))
   );
 
   const handleEdit = (id: string) => {
@@ -60,7 +61,7 @@ export function ProdutosView() {
         isLoading={isLoading}
         searchComponent={
           <Input
-            placeholder="Buscar por nome ou SKU"
+            placeholder="Buscar por nome, SKU e marca"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="max-w-sm"
