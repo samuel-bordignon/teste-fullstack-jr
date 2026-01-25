@@ -1,12 +1,26 @@
+import { appendMovimentacoesParams } from "@/lib/query-params";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import z from "zod";
 
 
 // Zod Schemas
-export const createMovimentSchema = z.object({
+export const createMovimentacoesSchema = z.object({
     produto_id: z.string().min(1, "Selecione um produto"),
     quantidade: z.coerce.number().min(1, "Movimentação mínima deve ser maior que zero"),
     tipo: z.enum(["entrada", "saida"])
+});
+
+export const filterMovimentacoesSchema = z.object({
+    periodo: z.object({
+        inicio: z.string().optional(),
+        fim: z.string().optional(),
+    }).optional(),
+    quantidade: z.object({
+        min: z.number().int().min(0).optional(),
+        max: z.number().int().min(0).optional(),
+    }).optional(),
+    tipo: z.string().optional(),
+    produto: z.string().optional(),
 });
 
 // Types
@@ -26,11 +40,13 @@ enum Tipo_movimentacao {
     saida = "saida"
 };
 
-export type CreateMovimentacoesPayload = z.infer<typeof createMovimentSchema>;
+export type CreateMovimentacoesPayload = z.infer<typeof createMovimentacoesSchema>;
+export type FilterMovimentacoesPayload = z.infer<typeof filterMovimentacoesSchema>;
 
 // API Functions
-const fetchMovimentacoes = async (): Promise<Movimentacoes[]> => {
-    const response = await fetch("/api/movimentacoes");
+const fetchMovimentacoes = async (filters?: FilterMovimentacoesPayload): Promise<Movimentacoes[]> => {
+    const params = filters ? appendMovimentacoesParams(filters) : undefined
+    const response = await fetch(`/api/movimentacoes?${(params && params.toString()) && params.toString()}`);
     if (!response.ok) {
         throw new Error("Failed to fetch products");
     }
@@ -56,10 +72,10 @@ const createMovimentacoes = async (
 };
 
 // React Query Hooks
-export const useMovimentacoes = () => {
+export const useMovimentacoes = (filters?: FilterMovimentacoesPayload) => {
     return useQuery<Movimentacoes[], Error>({
-        queryKey: ["movimentacoes"],
-        queryFn: fetchMovimentacoes,
+        queryKey: ["movimentacoes", filters],
+        queryFn: () => fetchMovimentacoes(filters),
     });
 };
 

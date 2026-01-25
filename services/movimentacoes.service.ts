@@ -1,9 +1,10 @@
 import * as repository from "@/repositories/movimentacoes.repository"
 import { estoque_movimentacoes } from "@/generated/prisma/client"
 import prisma from "@/lib/db";
+import { FilterMovimentacoesPayload } from "@/hooks/use-movimentacoes";
 
-export const getAllMovimentacoes = async (): Promise<estoque_movimentacoes[]> => {
-    return repository.findAll();
+export const getAllMovimentacoes = async (filters?: FilterMovimentacoesPayload): Promise<estoque_movimentacoes[]> => {
+    return repository.findAll(filters);
 };
 
 export const createMovimentacoes = async (data: Omit<estoque_movimentacoes, 'id' | 'criado_em'>): Promise<estoque_movimentacoes> => {
@@ -12,7 +13,7 @@ export const createMovimentacoes = async (data: Omit<estoque_movimentacoes, 'id'
         const estoque = await tx.estoque.findUnique({
             where: { produto_id },
         });
-        
+
         if (!estoque) {
             throw new Error("Estoque não encontrado");
         };

@@ -1,8 +1,9 @@
 import * as repository from '@/repositories/categorias.repository';
 import { categorias } from '@/generated/prisma/client';
+import { FilterCategoriaPayload } from '@/hooks/use-categorias';
 
-export const getAllCategorias = async (): Promise<categorias[]> => {
-  return repository.findAll();
+export const getAllCategorias = async (filters?: FilterCategoriaPayload): Promise<categorias[]> => {
+  return repository.findAll(filters);
 };
 
 export const getCategoriaById = async (id: bigint): Promise<categorias | null> => {

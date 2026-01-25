@@ -7,7 +7,7 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { RHFInputField, RHFInputRangerField, RHFSelectField } from "./form-fields";
 
-type InputField<T> = {
+type InputFieldType<T> = {
   component: "input";
   name: keyof z.infer<T>;
   label: string;
@@ -15,7 +15,7 @@ type InputField<T> = {
   type?: string;
 };
 
-type SelectField<T> = {
+type SelectFieldType<T> = {
   component: "select";
   name: keyof z.infer<T>;
   label: string;
@@ -23,7 +23,7 @@ type SelectField<T> = {
   options: { label: string; value: string }[];
 };
 
-type InputRangerField = {
+type InputRangerFieldType = {
   component: "inputRanger";
   label: string;
   type?: "number" | "date";
@@ -36,9 +36,9 @@ interface DynamicFormProps<T extends z.ZodType<any, any, any>> {
   onSubmit: (data: z.infer<T>) => void;
   defaultValues?: Partial<z.infer<T>>;
   fields: Array<
-    | InputField<T>
-    | SelectField<T>
-    | InputRangerField
+    | InputFieldType<T>
+    | SelectFieldType<T>
+    | InputRangerFieldType
   >;
   submitButtonText?: string;
   isSubmitting?: boolean;

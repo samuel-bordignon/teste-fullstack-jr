@@ -4,7 +4,7 @@ import * as z from "zod";
 import { BaseModal } from "@/components/custom/base-modal";
 import { DynamicForm } from "@/components/custom/dynamic-form";
 import { toast } from "sonner";
-import { createMovimentSchema, useCreateMovimentacoes } from "@/hooks/use-movimentacoes";
+import { createMovimentacoesSchema, useCreateMovimentacoes } from "@/hooks/use-movimentacoes";
 import { useProdutos } from "@/hooks/use-produtos";
 
 export function AddMovimentModal({
@@ -48,7 +48,7 @@ export function AddMovimentModal({
     ];
 
 
-    const handleSubmit = (data: z.infer<typeof createMovimentSchema>) => {
+    const handleSubmit = (data: z.infer<typeof createMovimentacoesSchema>) => {
         createMovimentMutation.mutate(data, {
             onSuccess: () => {
                 toast.success("Movimentação registrada com sucesso!");
@@ -68,7 +68,7 @@ export function AddMovimentModal({
             onClose={onClose}
         >
             <DynamicForm
-                schema={createMovimentSchema}
+                schema={createMovimentacoesSchema}
                 onSubmit={handleSubmit}
                 defaultValues={{ quantidade: 0 }}
                 fields={formFields}

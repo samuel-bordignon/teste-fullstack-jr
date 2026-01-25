@@ -10,8 +10,8 @@ import { AddProductModal } from "@/components/produtos/produto-add-modal";
 import { EditProductModal } from "@/components/produtos/produto-edit-modal";
 import { DeleteProductDialog } from "@/components/produtos/produto-delete-dialog";
 import { normalizeString } from "@/lib/string-utils";
-import { FilterProductModal } from "../produtos/produto-filter";
-import { Funnel, X } from "lucide-react";
+import FilterTrigger from "../custom/filter-trigger";
+import { FilterProductModal } from "../produtos/produto-filter-modal";
 
 export function ProdutosView() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -67,18 +67,11 @@ export function ProdutosView() {
           />
         }
         filterComponent={
-          <>
-            <Button variant={"outline"} onClick={() => setIsFilterModalOpen(true)}>
-              Filtros <Funnel />
-            </Button>
-            {
-              filters && (
-                <Button variant={"outline"} onClick={() => setFilters(undefined)}>
-                  Limpar <X />
-                </Button>
-              )
-            }
-          </>
+          <FilterTrigger
+            filters={filters}
+            onClear={() => setFilters(undefined)}
+            onOpen={() => setIsFilterModalOpen(true)}
+          />
         }
         actionButtons={[
           <Button key="new-product" onClick={() => setIsAddModalOpen(true)}>
@@ -92,7 +85,6 @@ export function ProdutosView() {
         onClose={() => setIsFilterModalOpen(false)}
         onApply={(filters) => {
           setFilters(filters)
-          setIsFilterModalOpen(false)
         }}
       />
       <AddProductModal

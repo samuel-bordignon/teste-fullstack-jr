@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useCategories, Categoria } from "@/hooks/use-categorias";
+import { useCategories, Categoria, FilterCategoriaPayload } from "@/hooks/use-categorias";
 import { DataTable } from "@/components/custom/data-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,16 @@ import { AddCategoryModal } from "@/components/categorias/categoria-add-modal";
 import { EditCategoryModal } from "@/components/categorias/categoria-edit-modal";
 import { DeleteCategoryDialog } from "@/components/categorias/categoria-delete-dialog";
 import { normalizeString } from "@/lib/string-utils";
+import FilterTrigger from "../custom/filter-trigger";
+import { FilterCategoryModal } from "../categorias/categoria-filter-modal";
 
 export function CategoriasView() {
-  const { data: categories, isLoading, isError, error } = useCategories();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterCategoriaPayload>();
+  const { data: categories, isLoading, isError, error } = useCategories(filters);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Categoria | null>(
     null,
@@ -67,6 +71,13 @@ export function CategoriasView() {
             className="max-w-sm"
           />
         }
+        filterComponent={
+          <FilterTrigger
+            filters={filters}
+            onClear={() => setFilters(undefined)}
+            onOpen={() => setIsFilterModalOpen(true)}
+          />
+        }
         actionButtons={[
           <Button key="new-category" onClick={() => setIsAddModalOpen(true)}>
             Nova Categoria
@@ -77,6 +88,12 @@ export function CategoriasView() {
       <AddCategoryModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+      />
+
+      <FilterCategoryModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        onApply={setFilters}
       />
       <EditCategoryModal
         isOpen={isEditModalOpen}

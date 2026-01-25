@@ -57,7 +57,7 @@ export type FilterProdutoPayload = z.infer<typeof filterProdutoSchema>;
 
 // API Functions
 const fetchProdutos = async (filters?: FilterProdutoPayload): Promise<Produto[]> => {
-  const params = filters ? appendProductsParams(filters) : null;
+  const params = filters ? appendProductsParams(filters) : undefined;
   const response = await fetch(`/api/produtos?${(params && params.toString()) && params.toString()}`);
   if (!response.ok) {
     throw new Error("Failed to fetch products");

@@ -15,16 +15,16 @@ export const findAll = async (filters?: FilterProdutoPayload): Promise<produtos[
 
   if (filters?.periodo !== undefined) {
     where.criado_em = {
-      ...(filters.periodo.inicio && {
+      ...(filters.periodo.inicio !== undefined && {
         gte: new Date(filters.periodo.inicio),
       }),
-      ...(filters.periodo.fim && {
+      ...(filters.periodo.fim !== undefined && {
         lte: new Date(filters.periodo.fim),
       }),
     };
   }
 
-  if (filters?.quantidade) {
+  if (filters?.quantidade !== undefined) {
     where.estoque = {
       quantidade: {
         ...(filters.quantidade.min !== undefined && {

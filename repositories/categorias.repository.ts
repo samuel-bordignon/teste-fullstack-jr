@@ -1,8 +1,22 @@
 import prisma from '@/lib/db';
-import { categorias } from '@/generated/prisma/client';
+import { categorias, Prisma } from '@/generated/prisma/client';
+import { FilterCategoriaPayload } from '@/hooks/use-categorias';
 
-export const findAll = async (): Promise<categorias[]> => {
-  return prisma.categorias.findMany();
+export const findAll = async (filters?: FilterCategoriaPayload): Promise<categorias[]> => {
+  const where: Prisma.categoriasWhereInput = {};
+  
+  if (filters?.periodo) {
+    where.criado_em = {
+      ...(filters.periodo.inicio && {
+        gte: new Date(filters.periodo.inicio),
+      }),
+      ...(filters.periodo.fim && {
+        lte: new Date(filters.periodo.fim),
+      }),
+    };
+  }
+
+  return prisma.categorias.findMany({ where });
 };
 
 export const findById = async (id: bigint): Promise<categorias | null> => {

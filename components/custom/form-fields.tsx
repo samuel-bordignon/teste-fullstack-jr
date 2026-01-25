@@ -116,7 +116,6 @@ export function RHFInputRangerField({
                 <Input
                   type={type}
                   placeholder="De"
-                  value={field.value}
                   onChange={(e) =>
                     field.onChange(parseValue(e.target.value))
                   }
@@ -135,7 +134,6 @@ export function RHFInputRangerField({
                 <Input
                   type={type}
                   placeholder="Até"
-                  value={field.value}
                   onChange={(e) =>
                     field.onChange(parseValue(e.target.value))
                   }
