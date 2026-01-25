@@ -1,10 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as z from "zod";
+import { appendCategoriasParams } from "@/lib/query-params";
 
 // Zod Schemas
 export const createCategoriaSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
   descricao: z.string().optional(),
+});
+
+export const filterCategoriaSchema = z.object({
+  periodo: z.object({
+    inicio: z.string().optional(),
+    fim: z.string().optional(),
+  }).optional(),
 });
 
 export const updateCategoriaSchema = z.object({
@@ -25,9 +33,12 @@ export type CreateCategoriaPayload = z.infer<typeof createCategoriaSchema>;
 
 export type UpdateCategoriaPayload = z.infer<typeof updateCategoriaSchema>;
 
+export type FilterCategoriaPayload = z.infer<typeof filterCategoriaSchema>;
+
 // API Functions
-const fetchCategories = async (): Promise<Categoria[]> => {
-  const response = await fetch("/api/categorias");
+const fetchCategories = async (filters?: FilterCategoriaPayload): Promise<Categoria[]> => {
+  const params = filters ? appendCategoriasParams(filters) : undefined;
+  const response = await fetch(`/api/categorias?${(params && params.toString()) || ""}`);
   if (!response.ok) {
     throw new Error("Failed to fetch categories");
   }
@@ -87,10 +98,10 @@ const deleteCategory = async (id: string): Promise<void> => {
 };
 
 // React Query Hooks
-export const useCategories = () => {
+export const useCategories = (filters?: FilterCategoriaPayload) => {
   return useQuery<Categoria[], Error>({
-    queryKey: ["categorias"],
-    queryFn: fetchCategories,
+    queryKey: ["categorias", filters],
+    queryFn: () => fetchCategories(filters),
   });
 };
 

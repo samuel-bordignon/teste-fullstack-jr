@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import * as service from '@/services/categorias.service';
 
-export async function GET() {
-  const categorias = await service.getAllCategorias();
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const payload = {
+    periodo: {
+      inicio: searchParams.get('inicio') || undefined,
+      fim: searchParams.get('fim') || undefined,
+    },
+  };
+  const categorias = await service.getAllCategorias(payload);
   const categoriasSerialized = categorias.map(categoria => {
     return JSON.parse(
       JSON.stringify(categoria, (key, value) =>

@@ -1,3 +1,4 @@
+import { appendProductsParams } from "@/lib/query-params";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as z from "zod";
 
@@ -7,6 +8,19 @@ export const createProdutoSchema = z.object({
   sku: z.string().min(1, "SKU é obrigatório"),
   categoria_id: z.string().optional(),
   estoque_minimo: z.coerce.number().int().min(0, "Estoque mínimo não pode ser negativo").optional(),
+  marca: z.string().optional(),
+});
+
+export const filterProdutoSchema = z.object({
+  periodo: z.object({
+    inicio: z.string().optional(),
+    fim: z.string().optional(),
+  }).optional(),
+  quantidade: z.object({
+    min: z.number().int().min(0).optional(),
+    max: z.number().int().min(0).optional(),
+  }).optional(),
+  categoria: z.string().optional(),
   marca: z.string().optional(),
 });
 
@@ -39,10 +53,12 @@ export type Produto = {
 
 export type CreateProdutoPayload = z.infer<typeof createProdutoSchema>;
 export type UpdateProdutoPayload = z.infer<typeof updateProdutoSchema>;
+export type FilterProdutoPayload = z.infer<typeof filterProdutoSchema>;
 
 // API Functions
-const fetchProdutos = async (): Promise<Produto[]> => {
-  const response = await fetch("/api/produtos");
+const fetchProdutos = async (filters?: FilterProdutoPayload): Promise<Produto[]> => {
+  const params = filters ? appendProductsParams(filters) : undefined;
+  const response = await fetch(`/api/produtos?${(params && params.toString()) && params.toString()}`);
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
@@ -102,10 +118,10 @@ const deleteProduto = async (id: string): Promise<void> => {
 };
 
 // React Query Hooks
-export const useProdutos = () => {
+export const useProdutos = (filters?: FilterProdutoPayload) => {
   return useQuery<Produto[], Error>({
-    queryKey: ["produtos"],
-    queryFn: fetchProdutos,
+    queryKey: ["produtos", filters],
+    queryFn: () => fetchProdutos(filters),
   });
 };
 

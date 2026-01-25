@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
 import * as service from '@/services/produtos.service';
 
-export async function GET() {
-  const produtos = await service.getAllProdutos();
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const payload = {
+    categoria: searchParams.get('categoria') || undefined,
+    marca: searchParams.get('marca') || undefined,
+    periodo:{
+      inicio: searchParams.get('inicio') || undefined,
+      fim: searchParams.get('fim') || undefined,
+    },
+    quantidade:{
+      min: Number(searchParams.get('min')) || undefined,
+      max: Number(searchParams.get('max')) || undefined,
+    }
+  }
+
+  const produtos = await service.getAllProdutos(payload);
   const produtosSerialized = produtos.map(produto => {
     return JSON.parse(
       JSON.stringify(produto, (key, value) =>

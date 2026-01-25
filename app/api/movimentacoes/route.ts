@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
 import * as service from '@/services/movimentacoes.service';
 
-export async function GET() {
-    const movimentacoes = await service.getAllMovimentacoes();
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const payload = {
+        periodo: {
+            inicio: searchParams.get('inicio') || undefined,
+            fim: searchParams.get('fim') || undefined,
+        },
+        quantidade: {
+            min: Number(searchParams.get('min')) || undefined,
+            max: Number(searchParams.get('max')) || undefined,
+        },
+        tipo: searchParams.get('tipo') || undefined,
+        produto: searchParams.get('produto') || undefined,
+    }
+    console.log(payload, "na rota")
+    const movimentacoes = await service.getAllMovimentacoes(payload);
     const movimentacoesSerialized = movimentacoes.map(movimentacao => {
         return JSON.parse(
             JSON.stringify(movimentacao, (key, value) =>

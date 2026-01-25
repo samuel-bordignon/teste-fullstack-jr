@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Minus } from "lucide-react";
 
 interface FormFieldProps {
   name: string;
@@ -47,7 +48,6 @@ export function RHFInputField({
     />
   );
 }
-
 export function RHFSelectField({
   name,
   label,
@@ -55,7 +55,6 @@ export function RHFSelectField({
   options,
 }: FormFieldProps) {
   const { control } = useFormContext();
-
   return (
     <FormField
       control={control}
@@ -81,5 +80,70 @@ export function RHFSelectField({
         </FormItem>
       )}
     />
+  );
+}
+
+export function RHFInputRangerField({
+  from,
+  to,
+  label,
+  type = "number",
+}: {
+  from: string;
+  to: string;
+  label: string;
+  type?: string;
+}) {
+  const { control } = useFormContext();
+
+  const parseValue = (value: string) => {
+    if (type === "number") {
+      return value === "" ? undefined : Number(value);
+    }
+    return value || undefined;
+  };
+  return (
+    <div className="space-y-2">
+      <FormLabel>{label}</FormLabel>
+
+      <div className="flex items-center gap-2">
+        <FormField
+          control={control}
+          name={from}
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input
+                  type={type}
+                  placeholder="De"
+                  onChange={(e) =>
+                    field.onChange(parseValue(e.target.value))
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={to}
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input
+                  type={type}
+                  placeholder="Até"
+                  onChange={(e) =>
+                    field.onChange(parseValue(e.target.value))
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </div>
   );
 }
