@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useCategories } from "@/hooks/use-categorias";
 import { DataTable } from "@/components/custom/data-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,7 +17,9 @@ export function MovimentacoesView() {
     const [filters, setFilters] = useState<FilterMovimentacoesPayload>();
     const { data: moviments, isLoading, isError, error } = useMovimentacoes(filters);
     const [search, setSearch] = useState("");
-    const filteredMoviments = moviments?.filter((m) => normalizeString(m.produtos.nome).includes(normalizeString(search)));
+    const filteredMoviments = moviments?.filter((m) => 
+        normalizeString(m.produtos.nome).includes(normalizeString(search))||
+        normalizeString(m.id).includes(normalizeString(search)));
 
     if (isError) {
         return (
@@ -36,7 +37,7 @@ export function MovimentacoesView() {
                 isLoading={isLoading}
                 searchComponent={
                     <Input
-                        placeholder="Buscar por nome ou ID"
+                        placeholder="Buscar por nome do produto"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="max-w-sm"
