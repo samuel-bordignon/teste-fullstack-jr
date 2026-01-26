@@ -28,10 +28,9 @@ export function CategoriasView() {
     null,
   );
 
-
-  const filteredCategories = categories?.filter((categorie) =>
-    normalizeString(categorie.nome).includes(normalizeString(search)) ||
-    normalizeString(categorie.id).includes(normalizeString(search))
+  const filteredCategories = categories?.filter((c) =>
+    normalizeString(c.nome).includes(normalizeString(search)) ||
+    normalizeString(c.id).includes(normalizeString(search))
   );
 
   const handleEdit = (id: string) => {

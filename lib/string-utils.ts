@@ -1,4 +1,5 @@
-export function normalizeString(value: string) {
+export function normalizeString(value: string | null) {
+  if (!value) return ""
   return value
     .toLowerCase()
     .normalize("NFD")

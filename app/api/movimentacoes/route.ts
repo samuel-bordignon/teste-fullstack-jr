@@ -15,7 +15,6 @@ export async function GET(request: Request) {
         tipo: searchParams.get('tipo') || undefined,
         produto: searchParams.get('produto') || undefined,
     }
-    console.log(payload, "na rota")
     const movimentacoes = await service.getAllMovimentacoes(payload);
     const movimentacoesSerialized = movimentacoes.map(movimentacao => {
         return JSON.parse(

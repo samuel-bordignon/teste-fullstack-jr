@@ -14,7 +14,7 @@ export default function FilterTrigger({
     return (
         <>
             <Button variant={"outline"} onClick={onOpen}>
-                Filtros <Funnel />
+                Filtros Avançados <Funnel />
             </Button>
             {
                 filters && (
